@@ -30,20 +30,20 @@ for boat in boat_makes_list:
     url_dict[boat] = make_urls
 
 # iterating through the makes in the dictionary
+makes_list = []
+models_list = []
 for make in url_dict:
     make_name = make
-    makes_list = []
-    models_list = []
     # iterating through the URLs in each list 
     for url in url_dict[make]:
         URL = url
-        time.sleep(3)
+        time.sleep(0.5)
         page = requests.get(URL)
         soup = BeautifulSoup(page.content, "html.parser")
         # checking if page exists on JD Power     
         if (len(soup.find_all('h1', string="Sorry, We Couldn't Find That Page")) > 0):
             # skip if the page doesn't exist
-            print(URL)
+            #print(URL)
             continue
         else: 
             # setting up the soup (parsing through the html on the URL)
@@ -61,11 +61,10 @@ for make in url_dict:
                 # adding to a list of makes and models to make writing to Excel easier
                 makes_list.append(make_name.upper())
                 models_list.append(model.upper())
-    # names of columns
-    names = ['Make','Model']
-    # making dataframe and writing to Excel
-    df = pd.DataFrame(list(zip(makes_list, models_list)), columns=names)
-    print(df)
-    df.to_excel("models.xlsx")
 
+# names of columns
+names = ['Make','Model']
+# making dataframe and writing to Excel
+df = pd.DataFrame(list(zip(makes_list, models_list)), columns=names)
+df.to_excel("models.xlsx")
 print("DONE!")
