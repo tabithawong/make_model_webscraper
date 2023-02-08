@@ -61,7 +61,7 @@ for make in url_dict:
                 # adding to a list of makes and models to make writing to Excel easier
                 makes_list.append(make_name.upper())
                 models_list.append(model.upper())
-
+    print("Done "+make_name)
 # names of columns
 names = ['Make','Model']
 # making dataframe and writing to Excel
