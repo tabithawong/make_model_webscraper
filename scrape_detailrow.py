@@ -10,9 +10,12 @@ start_year = 2010
 # change path if file gets moved within your computer
 df = pd.read_excel("/Users/tabithawong/Documents/make_model_webscraper/make_model(1).xlsx")
 
-# creating the dictionary of all boat makes from the excel file, the end year is the key
-# 
+# creating the dictionary of all boat makes from the excel file, the end year is the value
+# key: boat make
+# value: end year
+
 # CHANGE HERE
+# grabbing all rows with a certain type
 df = df[df['Type'] == "RV"]
 # creating the list of all boat makes from the excel file
 boat_makes_dict = df.set_index('Make')['End Year'].to_dict()
@@ -29,6 +32,8 @@ for boat in boat_makes_dict:
     clean_boat = boat.replace("&", "and")
     final_boat = clean_boat.replace(" ", "-")
     end_year = boat_makes_dict[boat] + 1
+
+    # building the URL for each year in the for loop
     for year in range(start_year, end_year):
         # building the URL and adding it to the dictionary
         # CHANGE HERE
@@ -45,7 +50,6 @@ for make in url_dict:
     # iterating through the URLs in each list 
     for url in url_dict[make]:
         URL = url
-        url_split = int(url.split("/")[4])
         # sleep to prevent DDOS
         time.sleep(0.5)
         page = requests.get(URL)
@@ -62,16 +66,15 @@ for make in url_dict:
             for result in results:
                 # cleaning up the results and removing \r\n
                 raw_model = result.text
-                #print(raw_model)
+                # cleaning up the result text depending on the format of the website being scraped
                 # removing first \r\n
                 #index_model = raw_model.replace("\r\n                                        ","")
                 # removing second \r\n
                 #split_index = (index_model.index("\r\n"))
                 #model = index_model[0:split_index]
+                # stripping leading and trailing whitespace
                 model = raw_model.strip()
-                #print(model)
-                #print(model)
-                # adding to a list of makes and models to make writing to Excel easier
+                # adding to a list of makes and models to make writing to Excel easier, only add if the model does not already exist in the list
                 if (models_list.count(model.upper()) == 0):
                     makes_list.append(make_name.upper())
                     models_list.append(model.upper())
@@ -80,7 +83,6 @@ for make in url_dict:
 names = ['Make','Model']
 # making dataframe and writing to Excel
 df = pd.DataFrame(list(zip(makes_list, models_list)), columns=names)
-#print(df)
 # CHANGE HERE
 df.to_excel("rv_models.xlsx")
 print("DONE!")
