@@ -1,3 +1,5 @@
+# this code is used when the model names are found in <option> elements
+
 # importing packages
 import time
 import pandas as pd
@@ -45,7 +47,6 @@ for make in url_dict:
     make_name = make
     # iterating through the URL lists from each make key
     for url in url_dict[make]:
-        #print(url)
         URL = url
         # sleep to prevent DDOS
         time.sleep(0.5)

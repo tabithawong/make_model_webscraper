@@ -1,3 +1,5 @@
+# this code is used when the model names are found in a table with class=detail_row...
+
 # importing packages
 import time
 import pandas as pd
@@ -78,6 +80,7 @@ for make in url_dict:
                 if (models_list.count(model.upper()) == 0):
                     makes_list.append(make_name.upper())
                     models_list.append(model.upper())
+    # printing make name to track scraper progress
     print("Done "+make_name)
 # names of columns
 names = ['Make','Model']
